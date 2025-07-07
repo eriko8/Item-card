@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail Card</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .thumbnail:hover {
+            opacity: 0.75;
+        }
+        
+        .color-dot:hover {
+            ring-width: 2px;
+            ring-color: #4a5568;
+        }
+        
+        .main-image:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-200 font-sans">
+    <div class="container mx-auto p-4">
+        <div id="productCard" class="bg-white rounded-lg shadow-lg overflow-hidden max-w-4xl mx-auto my-6 flex flex-col md:flex-row">
+            <!-- Close Arrow -->
+            <div id="closeArrow" class="p-4 cursor-pointer text-gray-600 hover:text-gray-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </div>
+
+            <!-- Image Section -->
+            <div class="w-full md:w-1/2 p-6">
+                <div class="relative">
+                    <img id="mainImage" src="images/shop/Hesh_ANC_buy_box_black_4_c2f72c66-c182-42cb-9977-6881f92f90cc.webp" alt="Urbanears Plattan AD" class="w-full h-64 object-cover rounded-lg transition-transform duration-300 main-image">
+                </div>
+                <div id="thumbnailContainer" class="flex space-x-2 mt-4">
+                    <img src="images/shop/jblblack.webp" alt="Thumbnail 1" class="w-16 h-16 object-cover rounded-lg cursor-pointer thumbnail">
+                    <img src="images/shop/jblblue.jpeg" alt="Thumbnail 2" class="w-16 h-16 object-cover rounded-lg cursor-pointer thumbnail">
+                    <img src="images/shop/jblgreen.webp" alt="Thumbnail 3" class="w-16 h-16 object-cover rounded-lg cursor-pointer thumbnail">
+                    <img src="images/shop/jblred.webp" alt="Thumbnail 4" class="w-16 h-16 object-cover rounded-lg cursor-pointer thumbnail">
+                </div>
+            </div>
+
+            <!-- Info Section -->
+            <div class="w-full md:w-1/2 p-6">
+                <h2 class="text-2xl font-semibold text-gray-800">Urbanears Plattan AD</h2>
+                <p class="text-yellow-500 text-lg mt-1">★★★★☆</p>
+                <p class="text-gray-600 text-sm mt-1">Style: On-Ear</p>
+                <p class="text-gray-600 text-sm">Category: Audiophile</p>
+                <p class="text-gray-600 text-sm mt-2">
+                    <strong>Description:</strong> The Urbanears Plattan ADV is slightly cheaper than the average audiophile headphone, which costs $86.99. As on-ear headphones, you can expect solid sound quality and better noise cancellation than earbuds,
+                    as well as improved portability compared to over-ear types.
+                </p>
+                <div class="mt-4 flex space-x-2">
+                    <span class="text-sm text-gray-600">Colors:</span>
+                    <div class="flex space-x-1">
+                        <span class="w-4 h-4 bg-yellow-300 rounded-full cursor-pointer color-dot"></span>
+                        <span class="w-4 h-4 bg-pink-300 rounded-full cursor-pointer color-dot"></span>
+                        <span class="w-4 h-4 bg-green-300 rounded-full cursor-pointer color-dot"></span>
+                        <span class="w-4 h-4 bg-gray-500 rounded-full cursor-pointer color-dot"></span>
+                        <span class="w-4 h-4 bg-blue-500 rounded-full cursor-pointer color-dot"></span>
+                        <span class="w-4 h-4 bg-white rounded-full cursor-pointer border color-dot"></span>
+                        <span class="w-4 h-4 bg-red-500 rounded-full cursor-pointer color-dot"></span>
+                        <span class="w-4 h-4 bg-purple-300 rounded-full cursor-pointer color-dot"></span>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="text-xl font-bold text-gray-900">$59.00 <span class="text-sm text-gray-500">+ tax & shipping</span></span>
+                </div>
+                <button class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-teal-700 transition duration-200">
+                    Buy Now
+                </button>
+                <div class="mt-4 flex space-x-2">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/1200px-PayPal.svg.png" alt="PayPal" class="w-10 h-6 object-contain">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/1200px-Visa_Inc._logo.svg.png" alt="Visa" class="w-10 h-6 object-contain">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/1200px-MasterCard_Logo.svg.png" alt="Mastercard" class="w-10 h-6 object-contain">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Image switching functionality
+        const mainImage = document.getElementById('mainImage');
+        const thumbnails = document.querySelectorAll('.thumbnail');
+
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', () => {
+                mainImage.src = thumbnail.src;
+            });
+        });
+
+        // Close card functionality (optional hide)
+        const closeArrow = document.getElementById('closeArrow');
+        const productCard = document.getElementById('productCard');
+
+        closeArrow.addEventListener('click', () => {
+            productCard.style.display = 'none';
+        });
+    </script>
+</body>
+
+</html>
