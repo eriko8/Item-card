@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Cart</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .cart-container {
+      max-width: 700px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .cart-title {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .cart-items {
+      list-style: none;
+      padding: 0;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+    }
+
+    .cart-item img {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+    }
+
+    .cart-item-info {
+      flex-grow: 1;
+    }
+
+    .cart-item-price {
+      font-weight: bold;
+    }
+
+    .remove-button {
+      background: crimson;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .cart-total {
+      text-align: right;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .view-cart-link {
+      text-decoration: none;
+      font-weight: bold;
+      position: fixed;
+      top: 20px;
+      right: 30px;
+      z-index: 2000;
+      background: #fff;
+      padding: 8px 18px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <a href="cart.html" class="view-cart-link">🛒 View Cart</a>
+  <div class="cart-container">
+    <h2 class="cart-title">🛒 Your Cart</h2>
+    <ul class="cart-items" id="cartItems">
+      <!-- Cart items will be inserted here by JavaScript -->
+    </ul>
+    <p class="cart-total" id="cartTotal">Total: $0.00</p>
+  </div>
+
+  <script src="cart.js"></script>
+</body>
+</html>

@@ -6,107 +6,229 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Item Card</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+      .modal-bg {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+      .modal-card {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        max-width: 400px;
+        width: 100%;
+        padding: 32px 24px 24px 24px;
+        position: relative;
+        animation: fadeIn 0.2s;
+      }
+      .modal-close {
+        position: absolute;
+        top: 12px;
+        right: 16px;
+        font-size: 24px;
+        color: #888;
+        cursor: pointer;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+      }
+      .fade-img {
+        transition: opacity 0.2s;
+      }
+      .fade-img.show {
+        opacity: 1;
+      }
+      .fade-img:not(.show) {
+        opacity: 0;
+      }
+    </style>
 </head>
 
 <body>
 
-    <!-- Start of item card -->
-    <div class="product-card">
-        <span class="badge">-25%</span>
-        <img src="images/dress.jpg" alt="Product Image" class="product-image">
-        <div class="card-body">
-            <h3 class="product-title">White traditional long dress</h3>
+    <!-- Product cards will be rendered here by JS -->
+    <div class="card-container" id="card-container"></div>
+    <!-- Cards are rendered by JS -->
+    <div id="modal-root"></div>
+
+    <!-- Cart Bottom Panel -->
+    <div id="cartPanel" class="cart-panel-bottom" style="display:none;position:fixed;left:0;right:0;bottom:0;width:100vw;max-width:100vw;height:auto;min-height:180px;background:#fff;box-shadow:0 -2px 16px rgba(0,0,0,0.10);z-index:3000;padding:24px 18px 18px 18px;transition:bottom 0.3s;">
+      <h3 style="margin-top:0;">Your Cart</h3>
+      <ul id="inlineCartItems" class="cart-items" style="max-height:30vh;overflow-y:auto;"></ul>
+      <p id="inlineCartTotal" class="cart-total">Total: $0.00</p>
+      <button onclick="clearCart()" class="clear-cart" style="margin-top:10px;background:#888;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;">Clear All</button>
+      <button onclick="toggleCart()" class="close-cart" style="margin-top:10px;background:crimson;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;">Close</button>
+    </div>
+    <!-- Cart Toggle Button -->
+    <button onclick="toggleCart()" class="view-cart-btn" style="position:fixed;top:30px;right:30px;z-index:3100;background:#fff;padding:10px 22px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);font-weight:bold;">🛒 View Cart</button>
+
+    <script>
+    // DRY: Render cards and modals from products.json
+    async function fetchProducts() {
+      const res = await fetch('products.json');
+      return res.json();
+    }
+
+    function renderCard(product) {
+      const defaultColor = product.defaultColor || product.colors[0];
+      return `
+        <div class="product-card" data-id="${product.id}" style="cursor:pointer;">
+          <span class="badge">${product.badge}</span>
+          <img src="${product.images[defaultColor]}" alt="${product.title}" class="product-image fade-img show" data-main-img>
+          <div class="card-body">
+            <h3 class="product-title">${product.title}</h3>
             <div class="price">
-                <span class="new-price">$3.99</span>
-                <span class="old-price">$5.99</span>
+              <span class="new-price">${product.price}</span>
+              <span class="old-price">${product.oldPrice}</span>
             </div>
             <div class="colors">
-                <span class="color-dot blue"></span>
-                <span class="color-dot red"></span>
-                <span class="color-dot black"></span>
+              ${product.colors.map(c => `<span class="color-dot ${c}" data-color="${c}"></span>`).join('')}
             </div>
-            <a href="dress.html"><button class="buy-button" >BUY +</button></a>
+            <button class="buy-button" onclick="addToCart('${product.title.replace(/'/g, "\\'")}', ${parseFloat(product.price.replace(/[^\d.]/g, ''))}, '${product.images[defaultColor]}')">Buy Now</button>
             <div class="promo">
-                <span class="promo-code">#MONHPY</span>
-                <span class="promo-discount">20% Off</span>
+              <span class="promo-code">${product.promoCode}</span>
+              <span class="promo-discount">${product.promoDiscount}</span>
             </div>
+          </div>
+          <div class="wishlist">&#9825;</div>
         </div>
-        <div class="wishlist">&#9825;</div>
-    </div>
+      `;
+    } 
 
+    function createModal(product) {
+      const modalBg = document.createElement('div');
+      modalBg.className = 'modal-bg';
+      const defaultColor = product.defaultColor || product.colors[0];
+      modalBg.innerHTML = `
+        <div class="modal-card">
+          <span class="modal-close" title="Close">&times;</span>
+          <img src="${product.images[defaultColor]}" alt="${product.title}" style="width:100%;border-radius:12px;object-fit:cover;max-height:180px;" class="fade-img show" data-modal-img>
+          <span class="badge" style="position:absolute;top:20px;left:20px;">${product.badge}</span>
+          <h3 class="product-title" style="margin-top:18px;">${product.title}</h3>
+          <p class="description">${product.description}</p>
+          <div class="price-row" style="margin-bottom:10px;">
+            <span class="new-price">${product.price}</span>
+            <span class="old-price">${product.oldPrice}</span>
+          </div>
+          <div class="colors" style="margin-bottom:10px;">
+            ${product.colors.map(c => `<span class="color-dot ${c}" data-color="${c}"></span>`).join('')}
+          </div>
+          <div class="promo" style="margin-bottom:10px;">
+            <span class="promo-code">${product.promoCode}</span>
+            <span class="promo-discount">${product.promoDiscount}</span>
+          </div>
+          <button class="buy-button" style="margin-top:10px;width:100%;">BUY +</button>
+        </div>
+      `;
+      // Color switching for modal image
+      const modalImg = modalBg.querySelector('[data-modal-img]');
+      modalBg.querySelectorAll('.color-dot[data-color]').forEach(dot => {
+        dot.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const color = dot.getAttribute('data-color');
+          if (product.images[color]) {
+            modalImg.classList.remove('show');
+            setTimeout(() => {
+              modalImg.src = product.images[color];
+              modalImg.classList.add('show');
+            }, 200);
+          }
+        });
+      });
+      modalBg.querySelector('.modal-close').onclick = () => modalBg.remove();
+      modalBg.onclick = e => { if (e.target === modalBg) modalBg.remove(); };
+      return modalBg;
+    }
+
+    function addToCart(name, price, image) {
+      const cartItem = { name, price, image };
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.push(cartItem);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert(`${name} added to cart!`);
+    }
+
+    fetchProducts().then(products => {
+      // Render all cards
+      const container = document.getElementById('card-container');
+      if (container) {
+        container.innerHTML = products.map(renderCard).join('');
+        // Add click listeners for modal
+        container.querySelectorAll('.product-card[data-id]').forEach(card => {
+          // Color switching for card image
+          const id = card.getAttribute('data-id');
+          const product = products.find(p => p.id === id);
+          const img = card.querySelector('[data-main-img]');
+          card.querySelectorAll('.color-dot[data-color]').forEach(dot => {
+            dot.addEventListener('click', function(e) {
+              e.stopPropagation();
+              const color = dot.getAttribute('data-color');
+              if (product.images[color]) {
+                img.classList.remove('show');
+                setTimeout(() => {
+                  img.src = product.images[color];
+                  img.classList.add('show');
+                }, 200);
+              }
+            });
+          });
+          // Modal open
+          card.addEventListener('click', function(e) {
+            if (e.target.closest('button') || e.target.classList.contains('color-dot')) return;
+            if (!product) return;
+            const modal = createModal(product);
+            document.body.appendChild(modal);
+          });
+        });
+      }
+    });
+    function addToCart(name, price, image) {
+  const cartItem = { name, price, image };
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.push(cartItem);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  alert(`${name} added to cart!`);
+}
+
+function toggleCart() {
+  const panel = document.getElementById('cartPanel');
+  if (panel.style.display === 'none' || !panel.style.display) {
+    renderInlineCart();
+    panel.style.display = 'block';
+  } else {
+    panel.style.display = 'none';
+  }
+}
+
+function renderInlineCart() {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const list = document.getElementById('inlineCartItems');
+  const total = document.getElementById('inlineCartTotal');
+  list.innerHTML = '';
+  let sum = 0;
+  cart.forEach((item, i) => {
+    sum += Number(item.price);
+    const li = document.createElement('li');
+    li.className = 'cart-item';
+    li.innerHTML = `<img src="${item.image}" style="width:50px;height:50px;border-radius:6px;object-fit:cover;margin-right:10px;">${item.name} <span style="margin-left:auto;font-weight:bold;">$${item.price}</span> <button onclick="removeCartItem(${i})" style="background:crimson;color:#fff;border:none;padding:2px 8px;border-radius:4px;cursor:pointer;">x</button>`;
+    list.appendChild(li);
+  });
+  total.textContent = `Total: $${sum.toFixed(2)}`;
+}
+
+function removeCartItem(idx) {
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  cart.splice(idx, 1);
+  localStorage.setItem('cart', JSON.stringify(cart));
+  renderInlineCart();
+}
+    </script>
 </body>
 
 </html>
-<div class="card-container">
-    <!-- CARD 1 -->
-    <div class="product-card">
-        <span class="badge">-25%</span>
-        <img src="images/dress.jpg" alt="Product Image" class="product-image">
-        <div class="card-body">
-            <h3 class="product-title">White Traditional Long Dress</h3>
-            <div class="price">
-                <span class="new-price">$3.99</span>
-                <span class="old-price">$5.99</span>
-            </div>
-            <div class="colors">
-                <span class="color-dot blue"></span>
-                <span class="color-dot red"></span>
-                <span class="color-dot black"></span>
-            </div>
-            <a href="dress.html"><button class="buy-button">BUY +</button></a>
-            <div class="promo">
-                <span class="promo-code">#MONHPY</span>
-                <span class="promo-discount">20% Off</span>
-            </div>
-        </div>
-        <div class="wishlist">&#9825;</div>
-    </div>
-
-    <!-- CARD 2 -->
-    <div class="product-card">
-        <span class="badge">-15%</span>
-        <img src="images/shoes.jpg" alt="Product Image" class="product-image">
-        <div class="card-body">
-            <h3 class="product-title">Premium White Sneakers</h3>
-            <div class="price">
-                <span class="new-price">$7.49</span>
-                <span class="old-price">$8.79</span>
-            </div>
-            <div class="colors">
-                <span class="color-dot black"></span>
-                <span class="color-dot red"></span>
-                <span class="color-dot blue"></span>
-            </div>
-            <a href="shoes.html"><button class="buy-button">BUY +</button></a>
-            <div class="promo">
-                <span class="promo-code">#STEPUP</span>
-                <span class="promo-discount">15% Off</span>
-            </div>
-        </div>
-        <div class="wishlist">&#9825;</div>
-    </div>
-
-    <!-- CARD 3 -->
-    <div class="product-card">
-        <span class="badge">-30%</span>
-        <img src="images/jacket.jpg" alt="Product Image" class="product-image">
-        <div class="card-body">
-            <h3 class="product-title">Classic Black Jacket</h3>
-            <div class="price">
-                <span class="new-price">$12.99</span>
-                <span class="old-price">$18.99</span>
-            </div>
-            <div class="colors">
-                <span class="color-dot black"></span>
-                <span class="color-dot gray"></span>
-                <span class="color-dot blue"></span>
-            </div>
-            <a href="jacket.html"><button class="buy-button">BUY +</button></a>
-            <div class="promo">
-                <span class="promo-code">#WARM30</span>
-                <span class="promo-discount">30% Off</span>
-            </div>
-        </div>
-        <div class="wishlist">&#9825;</div>
-    </div>
-</div>

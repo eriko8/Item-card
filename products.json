@@ -1,0 +1,152 @@
+[
+  {
+    "id": "book1",
+    "title": "This Much Is True",
+    "author": "Miriam Margolyes",
+    "images": {
+      "default": "images/bookstore/This-Much-Is-True.jpg"
+    },
+    "defaultColor": "default",
+    "badge": "-10%",
+    "price": "$18.00",
+    "oldPrice": "$20.00",
+    "colors": ["default"],
+    "promoCode": "#BOOKSALE",
+    "promoDiscount": "",
+    "description": "A captivating memoir by Miriam Margolyes.",
+    "category": "Biography"
+  },
+  {
+    "id": "book2",
+    "title": "The Butcher and the Wren",
+    "author": "Alaina Urquhart",
+    "images": {
+      "default": "images/bookstore/The-Butcher-and-the-Wren.jpg"
+    },
+    "defaultColor": "default",
+    "badge": "-8%",
+    "price": "$15.00",
+    "oldPrice": "$16.50",
+    "colors": ["default"],
+    "promoCode": "#BOOKSALE",
+    "promoDiscount": "",
+    "description": "A thrilling mystery novel by Alaina Urquhart.",
+    "category": "Mystery"
+  },
+  {
+    "id": "book3",
+    "title": "It Happened One Summer",
+    "author": "Tessa Bailey",
+    "images": {
+      "default": "images/bookstore/It-Happened-One-Summer.jpg"
+    },
+    "defaultColor": "default",
+    "badge": "-5%",
+    "price": "$14.00",
+    "oldPrice": "$15.00",
+    "colors": ["default"],
+    "promoCode": "#BOOKSALE",
+    "promoDiscount": "",
+    "description": "A romantic summer read by Tessa Bailey.",
+    "category": "Romance"
+  },
+  {
+    "id": "bag1",
+    "title": "Leather Messenger Bag",
+    "brand": "Urban Carry",
+    "images": {
+      "default": "images/bookstore/Leather-Messenger-Bag.jpg"
+    },
+    "defaultColor": "brown",
+    "badge": "-12%",
+    "price": "$45.00",
+    "oldPrice": "$50.00",
+    "colors": ["brown", "black"],
+    "promoCode": "#BAGDEAL",
+    "promoDiscount": "",
+    "description": "Stylish and durable messenger bag for everyday use.",
+    "category": "Accessories"
+  },
+  {
+    "id": "watch1",
+    "title": "Classic Silver Watch",
+    "brand": "Timeless Co.",
+    "images": {
+      "default": "images/bookstore/Classic-Silver-Watch.jpg"
+    },
+    "defaultColor": "silver",
+    "badge": "-10%",
+    "price": "$75.00",
+    "oldPrice": "$80.00",
+    "colors": ["silver", "gold"],
+    "promoCode": "#WATCHDEAL",
+    "promoDiscount": "",
+    "description": "Elegant timepiece for all occasions.",
+    "category": "Accessories"
+  },
+  {
+    "id": "lamp1",
+    "title": "Modern Desk Lamp",
+    "brand": "LightEdge",
+    "images": {
+      "default": "images/bookstore/Modern-Desk-Lamp.jpg"
+    },
+    "defaultColor": "white",
+    "badge": "-7%",
+    "price": "$22.00",
+    "oldPrice": "$24.00",
+    "colors": ["white", "black"],
+    "promoCode": "#LAMPDEAL",
+    "promoDiscount": "",
+    "description": "Brighten your workspace with this modern lamp.",
+    "category": "Home Decor"
+  },
+  {
+    "id": "notebook1",
+    "title": "Hardcover Spiral Notebook",
+    "images": {
+      "default": "images/bookstore/Hardcover-Spiral-Notebook.jpg"
+    },
+    "defaultColor": "blue",
+    "badge": "-10%",
+    "price": "$2.50",
+    "oldPrice": "$2.79",
+    "colors": ["blue", "red", "green"],
+    "promoCode": "#WRITEON",
+    "promoDiscount": "",
+    "description": "Durable spiral-bound notebook with hardcover. Great for notes, journaling, or sketching.",
+    "category": "Stationery"
+  },
+  {
+    "id": "pen1",
+    "title": "Smooth Glide Ballpoint Pen Set",
+    "images": {
+      "default": "images/bookstore/Smooth-Glide-Ballpoint-Pen-Set.jpg"
+    },
+    "defaultColor": "black",
+    "badge": "-5%",
+    "price": "$1.99",
+    "oldPrice": "$2.10",
+    "colors": ["black", "blue", "multicolor"],
+    "promoCode": "#INKFLOW",
+    "promoDiscount": "",
+    "description": "Set of smooth-gliding ballpoint pens in vibrant colors. Perfect for school or office use.",
+    "category": "Stationery"
+  },
+  {
+    "id": "colorbook1",
+    "title": "Creative Coloring Book",
+    "images": {
+      "default": "images/bookstore/Creative-Coloring-Book.jpg"
+    },
+    "defaultColor": "default",
+    "badge": "-15%",
+    "price": "$3.49",
+    "oldPrice": "$4.10",
+    "colors": ["default"],
+    "promoCode": "#COLORFUN",
+    "promoDiscount": "",
+    "description": "Relax and get creative with this fun, themed coloring book for all ages.",
+    "category": "Books"
+  }
+]
